@@ -2,16 +2,10 @@ import React from "react";
 import { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import axios from "axios";
-import * as R from "ramda";
+import { getMetadata, getSortedAndLargest, getSrcSet } from "../helpers";
 
-type Sizes = [400, 1000, 2000];
-
-const App: NextPage<Metadata<Sizes>> = ({ images, sizes }) => {
-  const sortedSizes = R.sort((a, b) => a - b, sizes);
-  const largestSize = R.last(sortedSizes);
-
-  if (!largestSize) return null; // should never be the case
+const App: NextPage<Metadata> = ({ images, sizes }) => {
+  const [sortedSizes, largestSize] = getSortedAndLargest(sizes);
 
   return (
     <main>
@@ -25,15 +19,13 @@ const App: NextPage<Metadata<Sizes>> = ({ images, sizes }) => {
       <div>Images are here.</div>
       <div>
         {images.map(image => {
-          const srcSet = sortedSizes
-            .map(size => `${image.otherSizes[size]} ${size}w`)
-            .join(", ");
+          const srcSet = getSrcSet(sortedSizes, image);
 
           return (
             <Link
+              key={image.name}
               href={`/photo/[photo]`}
               as={`/photo/${image.name}`}
-              key={image.name}
             >
               <a>
                 <img src={image.otherSizes[largestSize]} srcSet={srcSet} />
@@ -47,10 +39,8 @@ const App: NextPage<Metadata<Sizes>> = ({ images, sizes }) => {
 };
 
 App.getInitialProps = async () => {
-  const metadataUrl =
-    "https://aron-photo-portfolio.s3-ap-southeast-2.amazonaws.com/metadata/metadata.json";
-  const { data } = await axios.get<Metadata<Sizes>>(metadataUrl);
-  return data;
+  const metadata = await getMetadata();
+  return metadata;
 };
 
 export default App;
