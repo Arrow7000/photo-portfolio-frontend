@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "next",
+    "prebuild": "tsc next.config.ts",
     "build": "next build",
     "preexport": "npm run build",
     "export": "next export",

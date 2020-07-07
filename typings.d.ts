@@ -8,7 +8,17 @@ interface Photo {
   otherSizes: NumObject;
 }
 
+type Album = {
+  album: {
+    name: string;
+    photos: Photo[];
+  };
+};
+type Image = { image: Photo };
+
+type AlbumOrImage = Album | Image;
+
 interface Metadata {
   sizes: number[];
-  images: Photo[];
+  imagesAndAlbums: AlbumOrImage[];
 }

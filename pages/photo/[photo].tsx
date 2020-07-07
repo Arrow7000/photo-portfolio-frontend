@@ -1,6 +1,11 @@
 import React from "react";
 import { NextPage } from "next";
-import { getMetadata, getSortedAndLargest, getSrcSet } from "../../helpers";
+import {
+  getMetadata,
+  getSortedAndLargest,
+  getSrcSet,
+  getImages
+} from "../../helpers";
 
 interface Props {
   photo: Photo;
@@ -21,9 +26,9 @@ Photo.getInitialProps = async ({ query }) => {
 
   const metadata = await getMetadata();
 
-  const photo = metadata.images.find(
-    image => image.name === photoName
-  ) as Photo;
+  const photos = getImages(metadata.imagesAndAlbums);
+
+  const photo = photos.find(photo => photo.name === photoName) as Photo;
 
   return { photo, sizes: metadata.sizes };
 };
