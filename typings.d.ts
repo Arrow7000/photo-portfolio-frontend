@@ -1,24 +1,14 @@
-type Url = string;
+type Orientation = "square" | "landscape" | "portrait";
 
-type NumObject = { [x: number]: Url };
+type Size = { path: string; width: number; height: number };
 
-interface Photo {
+type Img = {
   name: string;
-  original: Url;
-  otherSizes: NumObject;
-}
-
-type Album = {
-  album: {
-    name: string;
-    photos: Photo[];
-  };
+  originalPath: string;
+  orientation: Orientation;
+  otherSizes: Size[];
 };
-type Image = { image: Photo };
 
-type AlbumOrImage = Album | Image;
+type ImageContainer = { image: Img };
 
-interface Metadata {
-  sizes: number[];
-  imagesAndAlbums: AlbumOrImage[];
-}
+type Metadata = { imagesAndAlbums: ImageContainer[] };

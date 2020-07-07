@@ -1,36 +1,42 @@
-import React from "react";
-import { NextPage } from "next";
-import {
-  getMetadata,
-  getSortedAndLargest,
-  getSrcSet,
-  getImages
-} from "../../helpers";
+import { GetStaticPaths, GetStaticProps } from "next";
+import { getGetMetadata } from "../../src/data";
 
-interface Props {
-  photo: Photo;
-  sizes: Metadata["sizes"];
+export const getStaticPaths: GetStaticPaths = async () => {
+  const response = await getGetMetadata();
+  const paths = response.imagesAndAlbums.map(({ image }) => ({
+    params: { photo: image.name },
+  }));
+
+  return { paths, fallback: false };
+};
+
+export const getStaticProps: GetStaticProps<
+  PhotoProps,
+  { photo: string }
+> = async ({ params: { photo } }) => {
+  const response = await getGetMetadata();
+
+  const img = response.imagesAndAlbums.find(
+    ({ image }) => image.name === photo
+  );
+
+  return { props: { image: img.image } };
+};
+
+interface PhotoProps {
+  image: Img;
 }
 
-const Photo: NextPage<Props> = ({ photo, sizes }) => {
-  const [sortedSizes, largestSize] = getSortedAndLargest(sizes);
-  const srcSet = getSrcSet(sortedSizes, photo);
-
+function Photo({ image }: PhotoProps) {
   return (
-    <img src={photo.otherSizes[largestSize]} srcSet={srcSet} key={photo.name} />
+    <div>
+      <h1>Photo page here 👋</h1>
+      <p>
+        Source is <code>{image.name}</code>
+      </p>
+      <img src={image.originalPath} style={{ height: 1000, width: 1000 }} />
+    </div>
   );
-};
-
-Photo.getInitialProps = async ({ query }) => {
-  const photoName = query["photo"] as string;
-
-  const metadata = await getMetadata();
-
-  const photos = getImages(metadata.imagesAndAlbums);
-
-  const photo = photos.find(photo => photo.name === photoName) as Photo;
-
-  return { photo, sizes: metadata.sizes };
-};
+}
 
 export default Photo;
