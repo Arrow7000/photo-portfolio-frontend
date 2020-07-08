@@ -1,5 +1,7 @@
 import { GetStaticPaths, GetStaticProps } from "next";
-import { getGetMetadata } from "../../src/data";
+import styled from "styled-components";
+import { getGetMetadata } from "../../components/data";
+import { Photo, PhotoProps } from "../../components/Photo";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const response = await getGetMetadata();
@@ -23,20 +25,19 @@ export const getStaticProps: GetStaticProps<
   return { props: { image: img.image } };
 };
 
-interface PhotoProps {
-  image: Img;
-}
+const ImgContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
 
-function Photo({ image }: PhotoProps) {
+function PhotoPage({ image }: PhotoProps) {
   return (
-    <div>
-      <h1>Photo page here 👋</h1>
-      <p>
-        Source is <code>{image.name}</code>
-      </p>
-      <img src={image.originalPath} style={{ height: 1000, width: 1000 }} />
-    </div>
+    <main>
+      <ImgContainer>
+        <Photo image={image} />
+      </ImgContainer>
+    </main>
   );
 }
 
-export default Photo;
+export default PhotoPage;
