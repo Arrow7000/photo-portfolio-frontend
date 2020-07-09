@@ -1,7 +1,7 @@
 import { FC } from "react";
 import Link from "next/link";
 import styled from "styled-components";
-import { black, margin } from "./styles";
+import { black, margin, mobileWidth, tabletWidth } from "./styles";
 
 const HomeLink = styled.a`
   padding: 15px;
@@ -37,9 +37,30 @@ const PageContainer = styled.div`
   margin: ${margin}px;
 `;
 
+const FooterBar = styled.footer`
+  font-size: 0.8rem;
+  text-align: center;
+  margin: ${margin * 3}px ${margin}px;
+  text-transform: uppercase;
+`;
+
+const Middot = styled.span`
+  margin: 0 ${margin / 2}px;
+
+  @media (min-width: ${mobileWidth}px) {
+    margin: 0 ${margin}px;
+  }
+
+  @media (min-width: ${tabletWidth}px) {
+    margin: 0 ${margin * 2}px;
+  }
+`;
+
+const FooterMiddot = () => <Middot>&middot;</Middot>;
+
 export const Layout: FC = ({ children }) => {
   return (
-    <div>
+    <>
       <NavBar>
         <Link href="/" passHref>
           <HomeLink>Home</HomeLink>
@@ -53,6 +74,14 @@ export const Layout: FC = ({ children }) => {
       </NavBar>
       <Hr />
       <PageContainer>{children}</PageContainer>
-    </div>
+      <FooterBar>
+        <Link href="/">
+          <a>Home</a>
+        </Link>{" "}
+        <FooterMiddot /> <a href="https://instagram.com/arrow7000">Instagram</a>{" "}
+        <FooterMiddot /> <a href="https://adler.dev">adler.dev</a>{" "}
+        <FooterMiddot /> © Aron Adler 2020
+      </FooterBar>
+    </>
   );
 };
