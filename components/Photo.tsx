@@ -1,14 +1,16 @@
 import styled from "styled-components";
-import { margin, black } from "./styles";
+import { margin, black, mobileWidth } from "./styles";
 import { sortBy } from "ramda";
 
-const border = margin * 3;
-
 const Image = styled.img`
-  border: ${border}px solid ${black};
+  border: ${margin * 2}px solid ${black};
   max-height: calc(100vh - ${margin * 2}px);
   max-width: calc(100vw - ${margin * 2}px);
   object-fit: contain;
+
+  @media (min-width: ${mobileWidth}px) {
+    border-width: ${margin * 3}px;
+  }
 `;
 
 export interface PhotoProps {

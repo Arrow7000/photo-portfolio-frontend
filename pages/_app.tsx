@@ -4,12 +4,17 @@ import { Layout } from "../components/Layout";
 
 import "../components/reset.css";
 import Head from "next/head";
-import { black } from "../components/styles";
+import { black, mobileWidth } from "../components/styles";
 
 const style = css`
-  body {
+  :root {
+    font-size: 10px;
     font-family: "Open Sans", sans-serif;
     color: ${black};
+
+    @media (min-width: ${mobileWidth}px) {
+      font-size: 16px;
+    }
   }
 
   a {

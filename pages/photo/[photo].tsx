@@ -3,6 +3,7 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import styled from "styled-components";
 import { getGetMetadata } from "../../components/data";
 import { Photo, PhotoProps } from "../../components/Photo";
+import { useRef } from "react";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const response = await getGetMetadata();
@@ -32,14 +33,18 @@ const ImgContainer = styled.div`
 `;
 
 function PhotoPage({ image }: PhotoProps) {
+  const photoRef = useRef<HTMLDivElement>();
+
   return (
     <>
       <Head>
         <title>Photo {image.name} | photos.adler.dev</title>
       </Head>
       <main>
-        <ImgContainer>
-          <Photo image={image} />
+        <ImgContainer id="photo" ref={photoRef}>
+          <div onClick={() => photoRef.current.scrollIntoView()}>
+            <Photo image={image} />
+          </div>
         </ImgContainer>
       </main>
     </>

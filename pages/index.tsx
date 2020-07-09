@@ -3,8 +3,7 @@ import { getGetMetadata } from "../components/data";
 import { GetStaticProps } from "next";
 import Link from "next/link";
 import styled from "styled-components";
-import { Photo, makeSrcSet } from "../components/Photo";
-import { margin, black } from "../components/styles";
+import { margin, black, mobileWidth, tabletWidth } from "../components/styles";
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
   const { imagesAndAlbums } = await getGetMetadata();
@@ -18,13 +17,27 @@ interface HomeProps {
 
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-auto-rows: auto;
-  grid-auto-flow: dense;
+  grid-template-columns: repeat(1, 1fr);
+  grid-auto-rows: 1fr;
   grid-gap: ${margin}px;
+
+  @media (min-width: ${mobileWidth}px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: ${tabletWidth}px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
 `;
 
-const HomePhoto = styled.img`
+const HomePhoto = styled.div<{ image: Img }>`
+  background-image: url(${({ image }) => image.thumbNail});
+  background-size: cover;
+  background-position: center;
+  padding-top: 100%;
+`;
+
+const HomePhotoContainer = styled.div`
   border: 10px solid ${black};
 `;
 
@@ -43,9 +56,10 @@ export default function Home({ imgs }: HomeProps) {
                 href="/photo/[photo]"
                 as={`/photo/${img.name}`}
               >
-                {/* <a>{img.name}</a> */}
                 <a>
-                  <HomePhoto srcSet={makeSrcSet(img)} src={img.originalPath} />
+                  <HomePhotoContainer>
+                    <HomePhoto image={img} />
+                  </HomePhotoContainer>
                 </a>
               </Link>
             ))}

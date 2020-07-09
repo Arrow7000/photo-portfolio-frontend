@@ -5,12 +5,14 @@ import { black, margin } from "./styles";
 
 const HomeLink = styled.a`
   padding: 15px;
-  font-size: 3rem;
+  font-size: 2rem;
   font-weight: 300;
   line-height: 1;
+  text-transform: uppercase;
 `;
 
 const NavBar = styled.nav`
+  text-transform: uppercase;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -21,6 +23,7 @@ const ExternalLink = styled.a`
   font-size: 1.2rem;
   padding-left: ${margin}px;
   padding-right: ${margin}px;
+  line-height: 1;
 `;
 
 const Hr = styled.hr`
