@@ -30,28 +30,28 @@ const HomePhoto = styled.img`
 
 export default function Home({ imgs }: HomeProps) {
   return (
-    <div className="container">
+    <>
       <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>Aron's Photography Portfolio | photos.adler.dev</title>
       </Head>
-
-      <main>
-        <Grid>
-          {imgs.map((img) => (
-            <Link
-              key={img.name}
-              href="/photo/[photo]"
-              as={`/photo/${img.name}`}
-            >
-              {/* <a>{img.name}</a> */}
-              <a>
-                <HomePhoto srcSet={makeSrcSet(img)} src={img.originalPath} />
-              </a>
-            </Link>
-          ))}
-        </Grid>
-      </main>
-    </div>
+      <div className="container">
+        <main>
+          <Grid>
+            {imgs.map((img) => (
+              <Link
+                key={img.name}
+                href="/photo/[photo]"
+                as={`/photo/${img.name}`}
+              >
+                {/* <a>{img.name}</a> */}
+                <a>
+                  <HomePhoto srcSet={makeSrcSet(img)} src={img.originalPath} />
+                </a>
+              </Link>
+            ))}
+          </Grid>
+        </main>
+      </div>
+    </>
   );
 }

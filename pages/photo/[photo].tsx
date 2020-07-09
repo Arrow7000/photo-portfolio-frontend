@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { GetStaticPaths, GetStaticProps } from "next";
 import styled from "styled-components";
 import { getGetMetadata } from "../../components/data";
@@ -32,11 +33,16 @@ const ImgContainer = styled.div`
 
 function PhotoPage({ image }: PhotoProps) {
   return (
-    <main>
-      <ImgContainer>
-        <Photo image={image} />
-      </ImgContainer>
-    </main>
+    <>
+      <Head>
+        <title>Photo {image.name} | photos.adler.dev</title>
+      </Head>
+      <main>
+        <ImgContainer>
+          <Photo image={image} />
+        </ImgContainer>
+      </main>
+    </>
   );
 }
 
