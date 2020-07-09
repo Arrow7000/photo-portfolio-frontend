@@ -4,6 +4,7 @@ import { GetStaticProps } from "next";
 import Link from "next/link";
 import styled from "styled-components";
 import { margin, black, mobileWidth, tabletWidth } from "../components/styles";
+import { siteUrl } from "../components/config";
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
   const { imagesAndAlbums } = await getGetMetadata();
@@ -38,14 +39,14 @@ const HomePhoto = styled.div<{ image: Img }>`
 `;
 
 const HomePhotoContainer = styled.div`
-  border: 10px solid ${black};
+  border: ${margin}px solid ${black};
 `;
 
 export default function Home({ imgs }: HomeProps) {
   return (
     <>
       <Head>
-        <title>Aron's Photography Portfolio | photos.adler.dev</title>
+        <title>Aron Adler Photography Portfolio | {siteUrl}</title>
       </Head>
       <div className="container">
         <main>

@@ -1,14 +1,18 @@
 import styled from "styled-components";
-import { margin, black, mobileWidth } from "./styles";
+import { margin, black, mobileWidth, tabletWidth } from "./styles";
 import { sortBy } from "ramda";
 
 const Image = styled.img`
-  border: ${margin * 2}px solid ${black};
+  border: ${margin}px solid ${black};
   max-height: calc(100vh - ${margin * 2}px);
   max-width: calc(100vw - ${margin * 2}px);
   object-fit: contain;
 
   @media (min-width: ${mobileWidth}px) {
+    border-width: ${margin * 2}px;
+  }
+
+  @media (min-width: ${tabletWidth}px) {
     border-width: ${margin * 3}px;
   }
 `;

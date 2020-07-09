@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { getGetMetadata } from "../../components/data";
 import { Photo, PhotoProps } from "../../components/Photo";
 import { useRef } from "react";
+import { siteUrl } from "../../components/config";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const response = await getGetMetadata();
@@ -38,7 +39,9 @@ function PhotoPage({ image }: PhotoProps) {
   return (
     <>
       <Head>
-        <title>Photo {image.name} | photos.adler.dev</title>
+        <title>
+          Photo {image.name} | {siteUrl}
+        </title>
       </Head>
       <main>
         <ImgContainer id="photo" ref={photoRef}>
