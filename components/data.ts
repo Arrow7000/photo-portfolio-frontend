@@ -1,5 +1,5 @@
 const metadataUrl =
-  "https://d3ltknfikz7r4w.cloudfront.net/metadata/metadata.json";
+  "https://aron-photo-portfolio.s3-ap-southeast-2.amazonaws.com/metadata/metadata.json";
 
 export const getGetMetadata = async () => {
   const res = await fetch(metadataUrl);
