@@ -1,10 +1,14 @@
 import styled from "styled-components";
-import { margin } from "./styles";
+import { margin, black } from "./styles";
+import { sortBy } from "ramda";
+
+const border = margin * 3;
 
 const Image = styled.img`
-  padding: ${margin}px;
-  max-height: 100vh;
-  max-width: 100vw;
+  border: ${border}px solid ${black};
+  max-height: calc(100vh - ${margin * 2}px);
+  max-width: calc(100vw - ${margin * 2}px);
+  object-fit: contain;
 `;
 
 export interface PhotoProps {
@@ -12,7 +16,9 @@ export interface PhotoProps {
 }
 
 export const makeSrcSet = (image: Img) =>
-  image.otherSizes.map(({ width, path }) => `${path} ${width}w`).join(",");
+  sortBy((size) => size.width, image.otherSizes)
+    .map(({ width, path }) => `${path} ${width}w`)
+    .join(",");
 
 export function Photo({ image }: PhotoProps) {
   const srcSet = makeSrcSet(image);

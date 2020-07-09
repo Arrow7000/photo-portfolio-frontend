@@ -4,7 +4,7 @@ import { GetStaticProps } from "next";
 import Link from "next/link";
 import styled from "styled-components";
 import { Photo, makeSrcSet } from "../components/Photo";
-import { margin } from "../components/styles";
+import { margin, black } from "../components/styles";
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
   const { imagesAndAlbums } = await getGetMetadata();
@@ -17,15 +17,16 @@ interface HomeProps {
 }
 
 const Grid = styled.div`
-  margin: ${margin}px;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   grid-auto-rows: auto;
   grid-auto-flow: dense;
   grid-gap: ${margin}px;
 `;
 
-const HomePhoto = styled.img``;
+const HomePhoto = styled.img`
+  border: 10px solid ${black};
+`;
 
 export default function Home({ imgs }: HomeProps) {
   return (

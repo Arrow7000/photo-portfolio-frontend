@@ -14,6 +14,7 @@ const NavBar = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-right: ${margin * 2}px;
 `;
 
 const ExternalLink = styled.a`
@@ -27,6 +28,10 @@ const Hr = styled.hr`
   border-top-color: ${black};
   margin-left: ${margin}px;
   margin-right: ${margin}px;
+`;
+
+const PageContainer = styled.div`
+  margin: ${margin}px;
 `;
 
 export const Layout: FC = ({ children }) => {
@@ -44,7 +49,7 @@ export const Layout: FC = ({ children }) => {
         </div>
       </NavBar>
       <Hr />
-      {children}
+      <PageContainer>{children}</PageContainer>
     </div>
   );
 };
