@@ -35,6 +35,10 @@ const ImgContainer = styled.div`
   padding-top: ${margin}px;
 `;
 
+const ClickContainer = styled.div`
+  cursor: pointer;
+`;
+
 function PhotoPage({ image }: PhotoProps) {
   const photoRef = useRef<HTMLDivElement>();
 
@@ -47,9 +51,9 @@ function PhotoPage({ image }: PhotoProps) {
       </Head>
       <main>
         <ImgContainer id="photo" ref={photoRef}>
-          <div onClick={() => photoRef.current.scrollIntoView()}>
+          <ClickContainer onClick={() => photoRef.current.scrollIntoView()}>
             <Photo image={image} />
-          </div>
+          </ClickContainer>
         </ImgContainer>
       </main>
     </>
