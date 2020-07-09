@@ -5,6 +5,7 @@ import { getGetMetadata } from "../../components/data";
 import { Photo, PhotoProps } from "../../components/Photo";
 import { useRef } from "react";
 import { siteUrl } from "../../components/config";
+import { margin } from "../../components/styles";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const response = await getGetMetadata();
@@ -31,6 +32,7 @@ export const getStaticProps: GetStaticProps<
 const ImgContainer = styled.div`
   display: flex;
   justify-content: center;
+  padding-top: ${margin}px;
 `;
 
 function PhotoPage({ image }: PhotoProps) {
