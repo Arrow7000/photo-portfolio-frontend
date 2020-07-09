@@ -8,11 +8,11 @@ const Image = styled.img`
   max-width: calc(100vw - ${margin * 2}px);
   object-fit: contain;
 
-  @media (min-width: ${mobileWidth}px) {
+  @media (min-width: ${mobileWidth}px) and (min-height: ${mobileWidth}px) {
     border-width: ${margin * 2}px;
   }
 
-  @media (min-width: ${tabletWidth}px) {
+  @media (min-width: ${tabletWidth}px) and (min-height: ${tabletWidth}px) {
     border-width: ${margin * 3}px;
   }
 `;
