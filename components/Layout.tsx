@@ -2,6 +2,7 @@ import { FC } from "react";
 import Link from "next/link";
 import styled from "styled-components";
 import { black, margin, mobileWidth, tabletWidth } from "./styles";
+import Head from "next/head";
 
 const HomeLink = styled.a`
   padding: 15px;
@@ -61,6 +62,23 @@ const FooterMiddot = () => <Middot>&middot;</Middot>;
 export const Layout: FC = ({ children }) => {
   return (
     <>
+      <Head>
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=UA-145880995-2"
+        ></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', 'UA-145880995-2');
+        `,
+          }}
+        />
+      </Head>
       <NavBar>
         <Link href="/" passHref>
           <HomeLink>Home</HomeLink>

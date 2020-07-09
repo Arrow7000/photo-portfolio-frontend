@@ -3,7 +3,13 @@ import { getGetMetadata } from "../components/data";
 import { GetStaticProps } from "next";
 import Link from "next/link";
 import styled from "styled-components";
-import { margin, black, mobileWidth, tabletWidth } from "../components/styles";
+import {
+  margin,
+  black,
+  mobileWidth,
+  tabletWidth,
+  desktopWidth,
+} from "../components/styles";
 import { siteUrl } from "../components/config";
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
@@ -28,6 +34,10 @@ const Grid = styled.div`
 
   @media (min-width: ${tabletWidth}px) {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (min-width: ${desktopWidth}px) {
+    grid-template-columns: repeat(4, 1fr);
   }
 `;
 
