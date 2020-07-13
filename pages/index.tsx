@@ -56,7 +56,7 @@ export default function Home({ imgs }: HomeProps) {
   return (
     <>
       <Head>
-        <title>Aron Adler Photography Portfolio | {siteUrl}</title>
+        <title>Aron Adler Photography | {siteUrl}</title>
       </Head>
       <div className="container">
         <main>
