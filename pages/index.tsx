@@ -5,7 +5,6 @@ import Link from "next/link";
 import styled from "styled-components";
 import {
   margin,
-  black,
   mobileWidth,
   tabletWidth,
   desktopWidth,
@@ -48,9 +47,7 @@ const HomePhoto = styled.div<{ image: Img }>`
   padding-top: 100%;
 `;
 
-const HomePhotoContainer = styled.div`
-  border: ${margin}px solid ${black};
-`;
+const HomePhotoContainer = styled.div``;
 
 export default function Home({ imgs }: HomeProps) {
   return (
