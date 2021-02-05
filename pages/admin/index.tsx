@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { getAllPhotos } from "../../components/data";
 import {
   AppBar,
@@ -16,7 +15,8 @@ import {
   Toolbar,
   Typography,
 } from "@material-ui/core";
-import { getLargestImg } from "../../components/helpers";
+import { getSmallestImg } from "../../components/helpers";
+import { PhotoPreview } from "../../components/PhotoPreview";
 
 export default function AdminHome() {
   const [allPhotos, setAllPhotos] = useState<FullPhoto[]>([]);
@@ -63,12 +63,7 @@ export default function AdminHome() {
                     </Link>
                   </TableCell>
                   <TableCell>
-                    <Image
-                      src={getLargestImg(sizes).imageUrl}
-                      height={photo.height}
-                      width={photo.width}
-                      alt={photo.title}
-                    />
+                    <PhotoPreview src={getSmallestImg(sizes).imageUrl} />
                   </TableCell>
                   <TableCell>{photo.title}</TableCell>
                   <TableCell>

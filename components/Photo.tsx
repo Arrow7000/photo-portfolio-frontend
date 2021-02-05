@@ -17,7 +17,7 @@ const Image = styled.img`
   }
 `;
 
-export interface PhotoProps {
+interface PhotoProps {
   image: FullPhoto;
 }
 

@@ -2,24 +2,30 @@ import Head from "next/head";
 import { GetStaticPaths, GetStaticProps } from "next";
 import styled from "styled-components";
 import { getAllPhotos, getPhotoBySlug } from "../../components/data";
-import { Photo, PhotoProps } from "../../components/Photo";
-import { useRef } from "react";
+import { Photo } from "../../components/Photo";
+import { useEffect, useRef, useState } from "react";
 import { margin } from "../../components/styles";
+import { useRouter } from "next/router";
+
+interface PhotoPageProps {
+  image?: FullPhoto; // not present for fallback pages
+}
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const allPhotos = await getAllPhotos();
+
   const paths = allPhotos.map((fullPhoto) => ({
     params: { photo: fullPhoto.photo.slug },
   }));
 
-  return { paths, fallback: true };
+  return { paths, fallback: false };
 };
 
 export const getStaticProps: GetStaticProps<
-  PhotoProps,
+  PhotoPageProps,
   { photo: string }
 > = async ({ params }) => {
-  const image = await getPhotoBySlug(params?.photo as string);
+  const image = params ? await getPhotoBySlug(params.photo) : undefined;
 
   return { props: { image } };
 };
@@ -34,18 +40,31 @@ const ClickContainer = styled.div`
   cursor: pointer;
 `;
 
-function PhotoPage({ image }: PhotoProps) {
+function PhotoPage({ image: propImage }: PhotoPageProps) {
+  const router = useRouter();
+  const { photo: photoSlug } = router.query;
+  const [image, setImage] = useState(propImage);
+
+  useEffect(() => {
+    if (!propImage && photoSlug) {
+      getPhotoBySlug(photoSlug as string).then(setImage);
+    }
+  }, [photoSlug]);
+
   const photoRef = useRef<HTMLDivElement>(null);
 
   return (
     <>
       <Head>
-        <title>{image.photo.title} | Aron Adler Photography</title>
+        <title>
+          {(image ? image.photo.title : photoSlug) ?? "Photo"} | Aron Adler
+          Photography
+        </title>
       </Head>
       <main>
         <ImgContainer id="photo" ref={photoRef}>
           <ClickContainer onClick={() => photoRef.current?.scrollIntoView()}>
-            <Photo image={image} />
+            {image && <Photo image={image} />}
           </ClickContainer>
         </ImgContainer>
       </main>
