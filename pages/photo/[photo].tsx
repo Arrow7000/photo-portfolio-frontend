@@ -6,8 +6,8 @@ import { Photo } from "../../components/Photo";
 import { useEffect, useRef, useState } from "react";
 import { margin } from "../../components/styles";
 import { useRouter } from "next/router";
-import { ImageOgTags } from "../../components/ogTags";
-import { siteName } from "../../components/config";
+import { siteName, siteUrl } from "../../components/config";
+import { getLargestImg } from "../../components/helpers";
 
 interface PhotoPageProps {
   image?: FullPhoto; // not present for fallback pages
@@ -55,13 +55,43 @@ function PhotoPage({ image: propImage }: PhotoPageProps) {
 
   const photoRef = useRef<HTMLDivElement>(null);
 
+  // const largestSize = image ? getLargestImg(image.sizes) : null;
+
   return (
     <>
       <Head>
         <title>
           {(image ? image.photo.title : photoSlug) ?? "Photo"} | {siteName}
         </title>
-        {image && <ImageOgTags image={image} />}
+
+        {image && (
+          <>
+            <meta key="title" property="og:title" content={image.photo.title} />
+            <meta
+              property="og:image"
+              content={getLargestImg(image.sizes).imageUrl}
+            />
+            <meta
+              property="og:image:width"
+              content={`${getLargestImg(image.sizes).width}`}
+            />
+            <meta
+              property="og:image:height"
+              content={`${
+                (image.photo.height / image.photo.width) *
+                getLargestImg(image.sizes).width
+              }`}
+            />
+            <meta
+              property="og:url"
+              content={`${siteUrl}/photo/${image.photo.slug}`}
+            />
+            <meta property="og:site_name" content={siteName} />
+            <meta property="og:description" content={image.photo.description} />
+            <meta property="twitter:card" content="summary_large_image" />
+          </>
+        )}
+        {/* {image && <ImageOgTags image={image} />} */}
       </Head>
       <main>
         {image && (
