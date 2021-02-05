@@ -29,5 +29,12 @@ export const makeSrcSet = (image: FullPhoto) =>
 export function Photo({ image }: PhotoProps) {
   const srcSet = makeSrcSet(image);
 
-  return <Image srcSet={srcSet} src={getLargestImg(image.sizes).imageUrl} />;
+  return (
+    <Image
+      height={image.photo.height}
+      width={image.photo.width}
+      srcSet={srcSet}
+      src={getLargestImg(image.sizes).imageUrl}
+    />
+  );
 }
