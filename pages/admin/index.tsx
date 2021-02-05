@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import { getAllPhotos } from "../../components/data";
 import {
   AppBar,
@@ -15,8 +14,9 @@ import {
   Toolbar,
   Typography,
 } from "@material-ui/core";
-import { getSmallestImg } from "../../components/helpers";
+import { getSmallestImgUrl } from "../../components/helpers";
 import { PhotoPreview } from "../../components/PhotoPreview";
+import { NextLink } from "../../components/Links";
 
 export default function AdminHome() {
   const [allPhotos, setAllPhotos] = useState<FullPhoto[]>([]);
@@ -35,13 +35,12 @@ export default function AdminHome() {
         </Toolbar>
       </AppBar>
       <Container>
-        <Link href="/admin/new" passHref>
-          <a>
-            <Button variant="contained" size="large" color="primary">
-              Create new photo
-            </Button>
-          </a>
-        </Link>
+        <NextLink href="/admin/new">
+          <Button variant="contained" size="large" color="primary">
+            Create new photo
+          </Button>
+        </NextLink>
+
         <TableContainer>
           <Table>
             <TableHead>
@@ -56,22 +55,22 @@ export default function AdminHome() {
               {allPhotos.map(({ photo, sizes }) => (
                 <TableRow key={photo.id}>
                   <TableCell size="small">
-                    <Link href={`/admin/${photo.id}`}>
+                    <NextLink href={`/admin/${photo.id}`}>
                       <Button variant="contained" size="small">
                         Edit
                       </Button>
-                    </Link>
+                    </NextLink>
                   </TableCell>
                   <TableCell>
-                    <PhotoPreview src={getSmallestImg(sizes).imageUrl} />
+                    <PhotoPreview src={getSmallestImgUrl(sizes)} />
                   </TableCell>
                   <TableCell>{photo.title}</TableCell>
                   <TableCell>
-                    <Link href={`/photo/${photo.slug}`} passHref>
-                      <MaterialLink>
+                    <NextLink href={`/photo/${photo.slug}`}>
+                      <MaterialLink component="span">
                         <code>/photo/{photo.slug}</code>
                       </MaterialLink>
-                    </Link>
+                    </NextLink>
                   </TableCell>
                 </TableRow>
               ))}

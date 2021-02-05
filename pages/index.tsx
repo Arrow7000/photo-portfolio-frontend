@@ -9,7 +9,9 @@ import {
   tabletWidth,
   desktopWidth,
 } from "../components/styles";
-import { getSmallestImg } from "../components/helpers";
+import { getLargestImgUrl } from "../components/helpers";
+import { makeSrcSet } from "../components/Photo";
+import { siteName } from "../components/config";
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
   const allPhotos = await getAllPhotos();
@@ -40,33 +42,49 @@ const Grid = styled.div`
   }
 `;
 
-const HomePhoto = styled.div<{ image: FullPhoto }>`
-  background-image: url(${({ image }) => getSmallestImg(image.sizes).imageUrl});
-  background-size: cover;
-  background-position: center;
-  padding-top: 100%;
+const HomePhoto = styled.img<{ w: number; h: number }>`
+  max-width: initial; // to reset CSS reset 🙄
+
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  width: calc(100% * ${({ w, h }) => `${w} / ${h}`});
 `;
 
-const HomePhotoContainer = styled.div``;
+const HomePhotoContainer = styled.div`
+  overflow-x: hidden;
+  position: relative;
+  padding-top: 100%;
+`;
 
 export default function Home({ imgs }: HomeProps) {
   return (
     <>
       <Head>
-        <title>Aron Adler Photography</title>
+        <title>{siteName}</title>
       </Head>
       <div className="container">
         <main>
           <Grid>
-            {imgs.map((img) => (
-              <Link key={img.photo.id} href={`/photo/${img.photo.slug}`}>
-                <a>
-                  <HomePhotoContainer>
-                    <HomePhoto image={img} />
-                  </HomePhotoContainer>
-                </a>
-              </Link>
-            ))}
+            {imgs.map((img) => {
+              const srcSet = makeSrcSet(img);
+
+              return (
+                <Link key={img.photo.id} href={`/photo/${img.photo.slug}`}>
+                  <a>
+                    <HomePhotoContainer>
+                      <HomePhoto
+                        h={img.photo.height}
+                        w={img.photo.width}
+                        srcSet={srcSet}
+                        src={getLargestImgUrl(img.sizes)}
+                      />
+                    </HomePhotoContainer>
+                  </a>
+                </Link>
+              );
+            })}
           </Grid>
         </main>
       </div>

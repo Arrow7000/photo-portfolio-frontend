@@ -3,8 +3,11 @@ import { head, last, sortBy } from "ramda";
 export const getLargestImg = (sizes: NewSize[]) =>
   last(sortBy<NewSize>((size) => size.width, sizes)) as NewSize;
 
-export const getSmallestImg = (sizes: NewSize[]) =>
-  head(sortBy<NewSize>((size) => size.width, sizes)) as NewSize;
+export const getLargestImgUrl = (sizes: NewSize[]) =>
+  getLargestImg(sizes).imageUrl;
+
+export const getSmallestImgUrl = (sizes: NewSize[]) =>
+  (head(sortBy<NewSize>((size) => size.width, sizes)) as NewSize).imageUrl;
 
 export const stringToSlug = (str: string) => {
   const trimmedAndLower = str.replace(/^\s+|\s+$/g, "").toLowerCase();

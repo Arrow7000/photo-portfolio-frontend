@@ -6,6 +6,7 @@ import { Photo } from "../../components/Photo";
 import { useEffect, useRef, useState } from "react";
 import { margin } from "../../components/styles";
 import { useRouter } from "next/router";
+import { ImageOgTags } from "../../components/ogTags";
 
 interface PhotoPageProps {
   image?: FullPhoto; // not present for fallback pages
@@ -60,13 +61,21 @@ function PhotoPage({ image: propImage }: PhotoPageProps) {
           {(image ? image.photo.title : photoSlug) ?? "Photo"} | Aron Adler
           Photography
         </title>
+        {image && <ImageOgTags image={image} />}
       </Head>
       <main>
-        <ImgContainer id="photo" ref={photoRef}>
-          <ClickContainer onClick={() => photoRef.current?.scrollIntoView()}>
-            {image && <Photo image={image} />}
-          </ClickContainer>
-        </ImgContainer>
+        {image && (
+          <>
+            <h1>{image.photo.title}</h1>
+            <ImgContainer id="photo" ref={photoRef}>
+              <ClickContainer
+                onClick={() => photoRef.current?.scrollIntoView()}
+              >
+                <Photo image={image} />
+              </ClickContainer>
+            </ImgContainer>
+          </>
+        )}
       </main>
     </>
   );

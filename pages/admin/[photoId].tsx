@@ -11,7 +11,7 @@ import {
   Toolbar,
   Typography,
 } from "@material-ui/core";
-import { ArrowBack, Delete } from "@material-ui/icons";
+import { ArrowBack, Delete, Launch } from "@material-ui/icons";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { identity } from "ramda";
@@ -21,12 +21,13 @@ import { apiUrl } from "../../components/config";
 import { getPhotoById } from "../../components/data";
 import {
   getChangedFields,
-  getLargestImg,
+  getLargestImgUrl,
   pluraliseStr,
   stringToSlug,
   makeTuple,
 } from "../../components/helpers";
 import { PhotoPreview } from "../../components/PhotoPreview";
+import { NextLink } from "../../components/Links";
 
 export default function SinglePhotoAdmin() {
   const router = useRouter();
@@ -122,7 +123,8 @@ export default function SinglePhotoAdmin() {
     }
   };
 
-  const goToAdmin = () => router.push("/admin");
+  const adminPath = "/admin";
+  const goToAdmin = () => router.push(adminPath);
 
   const deletePhoto = async () => {
     if (fullImage) {
@@ -145,12 +147,21 @@ export default function SinglePhotoAdmin() {
     <>
       <AppBar position="static">
         <Toolbar>
-          <IconButton onClick={goToAdmin} edge="start">
-            <ArrowBack style={{ color: "white" }} />
-          </IconButton>
+          <NextLink href={adminPath}>
+            <IconButton edge="start">
+              <ArrowBack style={{ color: "white" }} />
+            </IconButton>
+          </NextLink>
           <Typography>
             Edit {localPhotoCopy ? localPhotoCopy.title : "Photo"}
           </Typography>
+          <IconButton>
+            {fullImage && (
+              <NextLink href={`/photo/${fullImage.photo.slug}`}>
+                <Launch style={{ color: "white" }} />
+              </NextLink>
+            )}
+          </IconButton>
         </Toolbar>
       </AppBar>
       <Toolbar />
@@ -162,7 +173,7 @@ export default function SinglePhotoAdmin() {
               src={
                 newImageDataUri
                   ? newImageDataUri
-                  : getLargestImg(fullImage.sizes).imageUrl
+                  : getLargestImgUrl(fullImage.sizes)
               }
               {...getRootProps()}
             />
@@ -188,6 +199,7 @@ export default function SinglePhotoAdmin() {
                 label="Slug"
                 onChange={onChanger("slug", stringToSlug)}
                 value={localPhotoCopy.slug}
+                required
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">

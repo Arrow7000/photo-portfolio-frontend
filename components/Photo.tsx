@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { margin, mobileWidth, tabletWidth } from "./styles";
 import { sortBy } from "ramda";
-import { getLargestImg } from "./helpers";
+import { getLargestImgUrl } from "./helpers";
 
 const Image = styled.img`
   max-height: calc(100vh - ${margin * 2}px);
@@ -34,7 +34,7 @@ export function Photo({ image }: PhotoProps) {
       height={image.photo.height}
       width={image.photo.width}
       srcSet={srcSet}
-      src={getLargestImg(image.sizes).imageUrl}
+      src={getLargestImgUrl(image.sizes)}
     />
   );
 }
