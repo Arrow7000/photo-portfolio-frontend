@@ -14,6 +14,7 @@ import {
 import { ArrowBack, Delete, Launch } from "@material-ui/icons";
 import axios from "axios";
 import { useRouter } from "next/router";
+import Head from "next/head";
 import { identity } from "ramda";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
@@ -145,6 +146,9 @@ export default function SinglePhotoAdmin() {
 
   return (
     <>
+      <Head>
+        <title>Edit {fullImage ? fullImage.photo.title : "Photo"}</title>
+      </Head>
       <AppBar position="static">
         <Toolbar>
           <NextLink href={adminPath}>
@@ -153,7 +157,7 @@ export default function SinglePhotoAdmin() {
             </IconButton>
           </NextLink>
           <Typography>
-            Edit {localPhotoCopy ? localPhotoCopy.title : "Photo"}
+            Edit {fullImage ? fullImage.photo.title : "Photo"}
           </Typography>
           <IconButton>
             {fullImage && (

@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { margin } from "../../components/styles";
 import { useRouter } from "next/router";
 import { ImageOgTags } from "../../components/ogTags";
+import { siteName } from "../../components/config";
 
 interface PhotoPageProps {
   image?: FullPhoto; // not present for fallback pages
@@ -58,8 +59,7 @@ function PhotoPage({ image: propImage }: PhotoPageProps) {
     <>
       <Head>
         <title>
-          {(image ? image.photo.title : photoSlug) ?? "Photo"} | Aron Adler
-          Photography
+          {(image ? image.photo.title : photoSlug) ?? "Photo"} | {siteName}
         </title>
         {image && <ImageOgTags image={image} />}
       </Head>

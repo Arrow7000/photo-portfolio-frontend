@@ -14,6 +14,7 @@ import {
   Toolbar,
   Typography,
 } from "@material-ui/core";
+import Head from "next/head";
 import { getSmallestImgUrl } from "../../components/helpers";
 import { PhotoPreview } from "../../components/PhotoPreview";
 import { NextLink } from "../../components/Links";
@@ -27,10 +28,13 @@ export default function AdminHome() {
 
   return (
     <>
+      <Head>
+        <title>Photos Admin</title>
+      </Head>
       <AppBar position="static">
         <Toolbar>
           <Container>
-            <Typography>Photos</Typography>
+            <Typography>Photos Admin</Typography>
           </Container>
         </Toolbar>
       </AppBar>
