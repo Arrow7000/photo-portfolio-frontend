@@ -1,1 +1,2 @@
-export const siteUrl = "photos.adler.dev";
+const serverUrl = "";
+export const apiUrl = serverUrl + "/api";

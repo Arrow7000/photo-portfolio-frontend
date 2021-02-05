@@ -1,5 +1,5 @@
 import { AppProps } from "next/app";
-import styled, { createGlobalStyle, css } from "styled-components";
+import { createGlobalStyle, css } from "styled-components";
 import { Layout } from "../components/Layout";
 
 import "../components/reset.css";
@@ -25,21 +25,35 @@ const style = css`
 
 const GlobalStyle = createGlobalStyle`${style}`;
 
-function MyApp({ Component, pageProps }: AppProps) {
-  return (
-    <>
-      <Head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap"
-          rel="stylesheet"
-        />
-      </Head>
-      <Layout>
-        <GlobalStyle />
+function MyApp({ Component, pageProps, router }: AppProps) {
+  if (!router.pathname.startsWith("/admin")) {
+    return (
+      <>
+        <Head>
+          <link
+            href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap"
+            rel="stylesheet"
+          />
+        </Head>
+        <Layout>
+          <GlobalStyle />
+          <Component {...pageProps} />
+        </Layout>
+      </>
+    );
+  } else {
+    return (
+      <>
+        <Head>
+          <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+          />
+        </Head>
         <Component {...pageProps} />
-      </Layout>
-    </>
-  );
+      </>
+    );
+  }
 }
 
 export default MyApp;

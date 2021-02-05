@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { margin, mobileWidth, tabletWidth } from "./styles";
 import { sortBy } from "ramda";
+import { getLargestImg } from "./helpers";
 
 const Image = styled.img`
   max-height: calc(100vh - ${margin * 2}px);
@@ -17,16 +18,16 @@ const Image = styled.img`
 `;
 
 export interface PhotoProps {
-  image: Img;
+  image: FullPhoto;
 }
 
-export const makeSrcSet = (image: Img) =>
-  sortBy((size) => size.width, image.otherSizes)
-    .map(({ width, path }) => `${path} ${width}w`)
+export const makeSrcSet = (image: FullPhoto) =>
+  sortBy((size) => size.width, image.sizes)
+    .map(({ width, imageUrl }) => `${imageUrl} ${width}w`)
     .join(",");
 
 export function Photo({ image }: PhotoProps) {
   const srcSet = makeSrcSet(image);
 
-  return <Image srcSet={srcSet} src={image.originalPath} />;
+  return <Image srcSet={srcSet} src={getLargestImg(image.sizes).imageUrl} />;
 }

@@ -1,32 +1,27 @@
 import Head from "next/head";
 import { GetStaticPaths, GetStaticProps } from "next";
 import styled from "styled-components";
-import { getGetMetadata } from "../../components/data";
+import { getAllPhotos, getPhotoBySlug } from "../../components/data";
 import { Photo, PhotoProps } from "../../components/Photo";
 import { useRef } from "react";
-import { siteUrl } from "../../components/config";
 import { margin } from "../../components/styles";
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const response = await getGetMetadata();
-  const paths = response.imagesAndAlbums.map(({ image }) => ({
-    params: { photo: image.name },
+  const allPhotos = await getAllPhotos();
+  const paths = allPhotos.map((fullPhoto) => ({
+    params: { photo: fullPhoto.photo.slug },
   }));
 
-  return { paths, fallback: false };
+  return { paths, fallback: true };
 };
 
 export const getStaticProps: GetStaticProps<
   PhotoProps,
   { photo: string }
-> = async ({ params: { photo } }) => {
-  const response = await getGetMetadata();
+> = async ({ params }) => {
+  const image = await getPhotoBySlug(params?.photo as string);
 
-  const img = response.imagesAndAlbums.find(
-    ({ image }) => image.name === photo
-  );
-
-  return { props: { image: img.image } };
+  return { props: { image } };
 };
 
 const ImgContainer = styled.div`
@@ -40,18 +35,16 @@ const ClickContainer = styled.div`
 `;
 
 function PhotoPage({ image }: PhotoProps) {
-  const photoRef = useRef<HTMLDivElement>();
+  const photoRef = useRef<HTMLDivElement>(null);
 
   return (
     <>
       <Head>
-        <title>
-          Photo {image.name} | {siteUrl}
-        </title>
+        <title>{image.photo.title} | Aron Adler Photography</title>
       </Head>
       <main>
         <ImgContainer id="photo" ref={photoRef}>
-          <ClickContainer onClick={() => photoRef.current.scrollIntoView()}>
+          <ClickContainer onClick={() => photoRef.current?.scrollIntoView()}>
             <Photo image={image} />
           </ClickContainer>
         </ImgContainer>

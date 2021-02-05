@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { getGetMetadata } from "../components/data";
+import { getAllPhotos } from "../components/data";
 import { GetStaticProps } from "next";
 import Link from "next/link";
 import styled from "styled-components";
@@ -9,16 +9,16 @@ import {
   tabletWidth,
   desktopWidth,
 } from "../components/styles";
-import { siteUrl } from "../components/config";
+import { getSmallestImg } from "../components/helpers";
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
-  const { imagesAndAlbums } = await getGetMetadata();
+  const allPhotos = await getAllPhotos();
 
-  return { props: { imgs: imagesAndAlbums.map(({ image }) => image) } };
+  return { props: { imgs: allPhotos } };
 };
 
 interface HomeProps {
-  imgs: Img[];
+  imgs: FullPhoto[];
 }
 
 const Grid = styled.div`
@@ -40,8 +40,8 @@ const Grid = styled.div`
   }
 `;
 
-const HomePhoto = styled.div<{ image: Img }>`
-  background-image: url(${({ image }) => image.thumbNail});
+const HomePhoto = styled.div<{ image: FullPhoto }>`
+  background-image: url(${({ image }) => getSmallestImg(image.sizes).imageUrl});
   background-size: cover;
   background-position: center;
   padding-top: 100%;
@@ -53,17 +53,13 @@ export default function Home({ imgs }: HomeProps) {
   return (
     <>
       <Head>
-        <title>Aron Adler Photography | {siteUrl}</title>
+        <title>Aron Adler Photography</title>
       </Head>
       <div className="container">
         <main>
           <Grid>
             {imgs.map((img) => (
-              <Link
-                key={img.name}
-                href="/photo/[photo]"
-                as={`/photo/${img.name}`}
-              >
+              <Link key={img.photo.id} href={`/photo/${img.photo.slug}`}>
                 <a>
                   <HomePhotoContainer>
                     <HomePhoto image={img} />
