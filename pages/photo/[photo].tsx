@@ -72,6 +72,10 @@ function PhotoPage({ image: propImage }: PhotoPageProps) {
               content={getLargestImg(image.sizes).imageUrl}
             />
             <meta
+              property="og:image:secure_url"
+              content={getLargestImg(image.sizes).imageUrl}
+            />
+            <meta
               property="og:image:width"
               content={`${getLargestImg(image.sizes).width}`}
             />
