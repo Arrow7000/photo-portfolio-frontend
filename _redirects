@@ -1,1 +1,2 @@
+/api/*  https://aron-image-portfolio.herokuapp.com/api:splat
 /*      /:splat
