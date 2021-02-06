@@ -67,6 +67,7 @@ function PhotoPage({ image: propImage }: PhotoPageProps) {
         {image && (
           <>
             <meta key="title" property="og:title" content={image.photo.title} />
+            <meta name="description" content={image.photo.description} />
             <meta property="og:image:type" content="image/jpeg" />
             <meta
               property="og:image"
@@ -93,7 +94,19 @@ function PhotoPage({ image: propImage }: PhotoPageProps) {
             />
             <meta property="og:site_name" content={siteName} />
             <meta property="og:description" content={image.photo.description} />
+
             <meta property="twitter:card" content="summary_large_image" />
+            <meta property="twitter:title" content={image.photo.title} />
+            <meta
+              property="twitter:description"
+              content={image.photo.description}
+            />
+            <meta
+              property="twitter:image"
+              content={getLargestImg(image.sizes).imageUrl}
+            />
+            <meta property="twitter:site" content="@Aron_Adler" />
+            <meta property="twitter:creator" content="@Aron_Adler" />
           </>
         )}
         {/* {image && <ImageOgTags image={image} />} */}
