@@ -1,7 +1,6 @@
 import Head from "next/head";
 import { getAllPhotos } from "../components/data";
 import { GetStaticProps } from "next";
-import Link from "next/link";
 import styled from "styled-components";
 import {
   margin,
@@ -12,6 +11,7 @@ import {
 import { getLargestImgUrl } from "../components/helpers";
 import { makeSrcSet } from "../components/Photo";
 import { siteName } from "../components/config";
+import { NextLink } from "../components/Links";
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
   const allPhotos = await getAllPhotos();
@@ -47,13 +47,13 @@ const HomePhoto = styled.img<{ w: number; h: number }>`
 
   position: absolute;
   left: 50%;
-  top: 0;
-  transform: translateX(-50%);
+  top: 50%;
+  transform: translate(-50%, -50%);
   width: calc(100% * ${({ w, h }) => `${w} / ${h}`});
 `;
 
 const HomePhotoContainer = styled.div`
-  overflow-x: hidden;
+  overflow: hidden;
   position: relative;
   padding-top: 100%;
 `;
@@ -71,18 +71,16 @@ export default function Home({ imgs }: HomeProps) {
               const srcSet = makeSrcSet(img);
 
               return (
-                <Link key={img.photo.id} href={`/photo/${img.photo.slug}`}>
-                  <a>
-                    <HomePhotoContainer>
-                      <HomePhoto
-                        h={img.photo.height}
-                        w={img.photo.width}
-                        srcSet={srcSet}
-                        src={getLargestImgUrl(img.sizes)}
-                      />
-                    </HomePhotoContainer>
-                  </a>
-                </Link>
+                <NextLink key={img.photo.id} href={`/photo/${img.photo.slug}`}>
+                  <HomePhotoContainer>
+                    <HomePhoto
+                      h={img.photo.height}
+                      w={img.photo.width}
+                      srcSet={srcSet}
+                      src={getLargestImgUrl(img.sizes)}
+                    />
+                  </HomePhotoContainer>
+                </NextLink>
               );
             })}
           </Grid>
