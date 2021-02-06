@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { margin } from "../../components/styles";
 import { useRouter } from "next/router";
 import { siteName, siteUrl } from "../../components/config";
-import { getLargestImg } from "../../components/helpers";
+import { getLargestImgUpTo } from "../../components/helpers";
 
 interface PhotoPageProps {
   image?: FullPhoto; // not present for fallback pages
@@ -55,8 +55,6 @@ function PhotoPage({ image: propImage }: PhotoPageProps) {
 
   const photoRef = useRef<HTMLDivElement>(null);
 
-  // const largestSize = image ? getLargestImg(image.sizes) : null;
-
   return (
     <>
       <Head>
@@ -64,52 +62,56 @@ function PhotoPage({ image: propImage }: PhotoPageProps) {
           {(image ? image.photo.title : photoSlug) ?? "Photo"} | {siteName}
         </title>
 
-        {image && (
-          <>
-            <meta key="title" property="og:title" content={image.photo.title} />
-            <meta name="description" content={image.photo.description} />
-            <meta property="og:image:type" content="image/jpeg" />
-            <meta
-              property="og:image"
-              content={getLargestImg(image.sizes).imageUrl}
-            />
-            <meta
-              property="og:image:secure_url"
-              content={getLargestImg(image.sizes).imageUrl}
-            />
-            <meta
-              property="og:image:width"
-              content={`${getLargestImg(image.sizes).width}`}
-            />
-            <meta
-              property="og:image:height"
-              content={`${
-                (image.photo.height / image.photo.width) *
-                getLargestImg(image.sizes).width
-              }`}
-            />
-            <meta
-              property="og:url"
-              content={`${siteUrl}/photo/${image.photo.slug}`}
-            />
-            <meta property="og:site_name" content={siteName} />
-            <meta property="og:description" content={image.photo.description} />
+        {/* IIFE so we don't have to repeat the getLargestImgUpTo call again and again */}
+        {image &&
+          (() => {
+            const largestPic = getLargestImgUpTo(image.sizes, 800);
+            return (
+              <>
+                <meta
+                  key="title"
+                  property="og:title"
+                  content={image.photo.title}
+                />
+                <meta name="description" content={image.photo.description} />
+                <meta property="og:image:type" content="image/jpeg" />
+                <meta property="og:image" content={largestPic.imageUrl} />
+                <meta
+                  property="og:image:secure_url"
+                  content={largestPic.imageUrl}
+                />
+                <meta
+                  property="og:image:width"
+                  content={`${largestPic.width}`}
+                />
+                <meta
+                  property="og:image:height"
+                  content={`${
+                    (image.photo.height / image.photo.width) * largestPic.width
+                  }`}
+                />
+                <meta
+                  property="og:url"
+                  content={`${siteUrl}/photo/${image.photo.slug}`}
+                />
+                <meta property="og:site_name" content={siteName} />
+                <meta
+                  property="og:description"
+                  content={image.photo.description}
+                />
 
-            <meta property="twitter:card" content="summary_large_image" />
-            <meta property="twitter:title" content={image.photo.title} />
-            <meta
-              property="twitter:description"
-              content={image.photo.description}
-            />
-            <meta
-              property="twitter:image"
-              content={getLargestImg(image.sizes).imageUrl}
-            />
-            <meta property="twitter:site" content="@Aron_Adler" />
-            <meta property="twitter:creator" content="@Aron_Adler" />
-          </>
-        )}
-        {/* {image && <ImageOgTags image={image} />} */}
+                <meta property="twitter:card" content="summary_large_image" />
+                <meta property="twitter:title" content={image.photo.title} />
+                <meta
+                  property="twitter:description"
+                  content={image.photo.description}
+                />
+                <meta property="twitter:image" content={largestPic.imageUrl} />
+                <meta property="twitter:site" content="@Aron_Adler" />
+                <meta property="twitter:creator" content="@Aron_Adler" />
+              </>
+            );
+          })()}
       </Head>
       <main>
         {image && (
