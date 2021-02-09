@@ -5,6 +5,7 @@ import { Layout } from "../components/Layout";
 import "../components/reset.css";
 import Head from "next/head";
 import { black, mobileWidth } from "../components/styles";
+import { AuthProvider } from "../components/AuthProvider";
 
 const style = css`
   :root {
@@ -26,34 +27,34 @@ const style = css`
 const GlobalStyle = createGlobalStyle`${style}`;
 
 function MyApp({ Component, pageProps, router }: AppProps) {
-  if (!router.pathname.startsWith("/admin")) {
-    return (
-      <>
-        <Head>
-          <link
-            href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap"
-            rel="stylesheet"
-          />
-        </Head>
-        <Layout>
-          <GlobalStyle />
+  return (
+    <AuthProvider>
+      {!router.pathname.startsWith("/admin") ? (
+        <>
+          <Head>
+            <link
+              href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap"
+              rel="stylesheet"
+            />
+          </Head>
+          <Layout>
+            <GlobalStyle />
+            <Component {...pageProps} />
+          </Layout>
+        </>
+      ) : (
+        <>
+          <Head>
+            <link
+              rel="stylesheet"
+              href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+            />
+          </Head>
           <Component {...pageProps} />
-        </Layout>
-      </>
-    );
-  } else {
-    return (
-      <>
-        <Head>
-          <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
-          />
-        </Head>
-        <Component {...pageProps} />
-      </>
-    );
-  }
+        </>
+      )}
+    </AuthProvider>
+  );
 }
 
 export default MyApp;
