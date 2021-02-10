@@ -52,3 +52,5 @@ type StringKeys<T> = {
 type EntryOf<T, K extends keyof T> = [K, T[K]];
 
 type Entries<T> = EntryOf<T, keyof T>[];
+
+type AuthState = "StillUnknown" | "NotLoggedIn" | "LoggedIn";

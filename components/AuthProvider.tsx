@@ -1,10 +1,12 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useRouter } from "next/router";
+import { identity } from "ramda";
 import { createContext, FC, useContext, useEffect, useState } from "react";
+import { serverUrl } from "./config";
 
 interface AuthContext {
-  token: null | string;
-  setToken: (token: null | string) => void;
+  authState: AuthState;
+  checkLoginState: VoidFunction;
 }
 
 const AuthCtx = createContext({} as AuthContext);
@@ -12,24 +14,46 @@ const AuthCtx = createContext({} as AuthContext);
 export const AuthProvider: FC = ({ children }) => {
   const router = useRouter();
 
-  // @TODO: should store this in localStorage
-  const [token, setToken] = useState<string | null>(null);
+  const [authState, setAuthState] = useState<AuthState>("StillUnknown");
+
+  const checkLoginState = () =>
+    axios
+      .get(serverUrl + "/auth/check")
+      .then(() => setAuthState("LoggedIn"))
+      .catch(() => setAuthState("NotLoggedIn"));
+
+  const goToLogin = () => router.push("/admin/login");
 
   useEffect(() => {
-    if (token) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    } else {
-      delete axios.defaults.headers.common["Authorization"];
-
-      // No need to be logged in unless we're in admin
-      if (router.pathname.startsWith("/admin")) {
-        router.push("/admin/login");
+    const unauthorizedInterceptor = axios.interceptors.response.use(
+      identity,
+      (error: AxiosError) => {
+        if (
+          error.response?.status === 401 && // not logged in
+          router.pathname.startsWith("/admin") // and it needs to be
+        ) {
+          setAuthState("NotLoggedIn");
+          return Promise.reject(error);
+        }
       }
+    );
+    return () => axios.interceptors.request.eject(unauthorizedInterceptor);
+  }, []);
+
+  useEffect(() => {
+    checkLoginState();
+  }, []);
+
+  useEffect(() => {
+    if (router.pathname.startsWith("/admin") && authState === "NotLoggedIn") {
+      goToLogin();
     }
-  }, [token]);
+  }, [authState]);
 
   return (
-    <AuthCtx.Provider value={{ token, setToken }}>{children}</AuthCtx.Provider>
+    <AuthCtx.Provider value={{ authState, checkLoginState }}>
+      {children}
+    </AuthCtx.Provider>
   );
 };
 

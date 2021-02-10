@@ -16,7 +16,7 @@ export default function LoginPage() {
 
   const goToAdminHome = () => router.push("/admin");
 
-  const { token, setToken } = useAuthCtx();
+  const { authState, checkLoginState } = useAuthCtx();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -25,10 +25,10 @@ export default function LoginPage() {
   const [error, setError] = useState<any | null>(null);
 
   useEffect(() => {
-    if (token) {
+    if (authState === "LoggedIn") {
       goToAdminHome();
     }
-  }, [token]);
+  }, [authState]);
 
   const login = async () => {
     try {
@@ -36,12 +36,8 @@ export default function LoginPage() {
       formData.append("username", username);
       formData.append("password", password);
 
-      const tokenResult = await axios.post<string>(
-        serverUrl + "/auth/login",
-        formData
-      );
-
-      setToken(tokenResult.data);
+      await axios.post(serverUrl + "/auth/login", formData);
+      checkLoginState();
     } catch (err) {
       setError(err);
     }
