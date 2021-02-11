@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { getAllPhotos } from "../components/data";
 import { GetStaticProps } from "next";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import {
   margin,
   mobileWidth,
@@ -49,7 +49,8 @@ const HomePhoto = styled.img<{ w: number; h: number }>`
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: calc(100% * ${({ w, h }) => `${w} / ${h}`});
+  width: ${({ w, h }) => (w > h ? css`calc(100% * (${w} / ${h}))` : "100%")};
+  height: ${({ w, h }) => (h > w ? css`calc(100% * (${h} / ${w}))` : "100%")};
 `;
 
 const HomePhotoContainer = styled.div`
