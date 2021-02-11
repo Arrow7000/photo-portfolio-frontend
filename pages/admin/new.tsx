@@ -17,6 +17,7 @@ import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { apiUrl } from "../../components/config";
 import { stringToSlug } from "../../components/helpers";
+import { NextLink } from "../../components/Links";
 import { PhotoPreview } from "../../components/PhotoPreview";
 
 export default function NewPhotoAdmin() {
@@ -58,7 +59,8 @@ export default function NewPhotoAdmin() {
     }
   }, [newImage]);
 
-  const goToAdmin = () => router.push("/admin");
+  const adminPath = "/admin";
+  const goToAdmin = () => router.push(adminPath);
 
   const cancelChanges = () => {
     goToAdmin();
@@ -97,9 +99,11 @@ export default function NewPhotoAdmin() {
     <>
       <AppBar position="static">
         <Toolbar>
-          <IconButton onClick={goToAdmin} edge="start" color="inherit">
-            <ArrowBack />
-          </IconButton>
+          <NextLink href={adminPath}>
+            <IconButton edge="start">
+              <ArrowBack style={{ color: "white" }} />
+            </IconButton>
+          </NextLink>
           <Typography>Create New Photo</Typography>
         </Toolbar>
       </AppBar>
