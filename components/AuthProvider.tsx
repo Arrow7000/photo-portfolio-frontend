@@ -13,6 +13,7 @@ const AuthCtx = createContext({} as AuthContext);
 
 export const AuthProvider: FC = ({ children }) => {
   const router = useRouter();
+  const isCurrentlyInAdmin = router.pathname.startsWith("/admin");
 
   const [authState, setAuthState] = useState<AuthState>("StillUnknown");
 
@@ -30,7 +31,7 @@ export const AuthProvider: FC = ({ children }) => {
       (error: AxiosError) => {
         if (
           error.response?.status === 401 && // not logged in
-          router.pathname.startsWith("/admin") // and it needs to be
+          isCurrentlyInAdmin // and it needs to be
         ) {
           setAuthState("NotLoggedIn");
           return Promise.reject(error);
@@ -41,11 +42,13 @@ export const AuthProvider: FC = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    checkLoginState();
+    if (isCurrentlyInAdmin) {
+      checkLoginState();
+    }
   }, []);
 
   useEffect(() => {
-    if (router.pathname.startsWith("/admin") && authState === "NotLoggedIn") {
+    if (isCurrentlyInAdmin && authState === "NotLoggedIn") {
       goToLogin();
     }
   }, [authState]);
