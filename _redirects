@@ -1,2 +1,3 @@
-/api/*  https://aron-photo-portfolio.herokuapp.com/api/:splat    200
+/api/*  https://image-portfolio-sbdp5.ondigitalocean.app/api/:splat    200
+/auth/*  https://image-portfolio-sbdp5.ondigitalocean.app/auth/:splat    200
 /*      /:splat     200
