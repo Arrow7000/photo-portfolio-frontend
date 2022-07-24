@@ -1,8 +1,20 @@
 import { FC } from "react";
 import Link from "next/link";
 import styled from "styled-components";
-import { black, margin, mobileWidth, tabletWidth } from "./styles";
+import {
+  black,
+  margin,
+  mobileWidth,
+  siteContentWidth,
+  tabletWidth,
+} from "./styles";
 import Head from "next/head";
+
+export const WidthConstrainer = styled.div`
+  max-width: ${siteContentWidth}px;
+  padding: 0 ${margin}px;
+  margin: 0 auto;
+`;
 
 const HomeLink = styled.a`
   padding: 15px;
@@ -30,13 +42,9 @@ const ExternalLink = styled.a`
 const Hr = styled.hr`
   margin-top: 0;
   border-top-color: ${black};
-  margin-left: ${margin}px;
-  margin-right: ${margin}px;
 `;
 
-const PageContainer = styled.div`
-  margin: ${margin}px;
-`;
+const PageContainer = styled.div``;
 
 const FooterBar = styled.footer`
   font-size: 0.8rem;
@@ -79,18 +87,20 @@ gtag('config', 'UA-145880995-2');
           }}
         />
       </Head>
-      <NavBar>
-        <Link href="/" passHref>
-          <HomeLink>Home</HomeLink>
-        </Link>
-        <div>
-          <ExternalLink href="https://instagram.com/arrow7000">
-            Instagram
-          </ExternalLink>
-          <ExternalLink href="https://adler.dev">adler.dev</ExternalLink>
-        </div>
-      </NavBar>
-      <Hr />
+      <WidthConstrainer>
+        <NavBar>
+          <Link href="/" passHref>
+            <HomeLink>Home</HomeLink>
+          </Link>
+          <div>
+            <ExternalLink href="https://instagram.com/arrow7000">
+              Instagram
+            </ExternalLink>
+            <ExternalLink href="https://adler.dev">adler.dev</ExternalLink>
+          </div>
+        </NavBar>
+        <Hr />
+      </WidthConstrainer>
       <PageContainer>{children}</PageContainer>
       <FooterBar>
         <Link href="/">
@@ -98,7 +108,7 @@ gtag('config', 'UA-145880995-2');
         </Link>{" "}
         <FooterMiddot /> <a href="https://instagram.com/arrow7000">Instagram</a>{" "}
         <FooterMiddot /> <a href="https://adler.dev">adler.dev</a>{" "}
-        <FooterMiddot /> © Aron Adler 2020
+        <FooterMiddot /> © Aron Adler 2022
       </FooterBar>
     </>
   );

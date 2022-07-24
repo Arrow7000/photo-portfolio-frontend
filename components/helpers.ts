@@ -34,7 +34,7 @@ export const stringToSlug = (str: string) => {
     .replace(/\//g, ""); // collapse all forward-slashes
 };
 
-const entries = <T>(obj: T) => (Object.entries(obj) as unknown) as Entries<T>;
+const entries = <T>(obj: T) => Object.entries(obj) as unknown as Entries<T>;
 
 const isNotNullish = <T>(t: T | null | undefined): t is T => !!t;
 
@@ -50,3 +50,6 @@ export const getChangedFields = <T>(original: T, copy: T): Entries<T> => {
 
 export const pluraliseStr = (str: string, num: number) =>
   `${str}${num === 1 ? "" : "s"}`;
+
+export const getOrientation = ({ width, height }: NewPhoto): Orientation =>
+  height === width ? "square" : width > height ? "landscape" : "portrait";

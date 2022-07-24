@@ -28,6 +28,7 @@ const Grid = styled.div`
   grid-template-columns: repeat(1, 1fr);
   grid-auto-rows: 1fr;
   grid-gap: ${margin}px;
+  margin: ${margin}px;
 
   @media (min-width: ${mobileWidth}px) {
     grid-template-columns: repeat(2, 1fr);
