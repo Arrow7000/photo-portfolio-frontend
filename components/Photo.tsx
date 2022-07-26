@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components";
-import { margin, siteContentWidth } from "./styles";
+import { margin, siteContentWidth, tabletWidth } from "./styles";
 import { sortBy } from "ramda";
 import { getLargestImgUrl, getOrientation } from "./helpers";
 
@@ -32,47 +32,55 @@ const ImageContainer = styled.div<PhotoProps>`
 
     const orientation = getOrientation(photo);
 
-    if (orientation === "landscape") {
-      return css`
-        flex-direction: column;
-        align-items: center;
+    const landscapeStyles = css`
+      flex-direction: column;
+      align-items: center;
+
+      .description {
+        margin: ${margin * 2}px auto ${margin}px;
+        p {
+          padding: 0 15px;
+        }
+      }
+    `;
+
+    const portraitSquareStyles = css`
+      justify-content: center;
+      max-width: ${siteContentWidth}px;
+      padding: 0 ${margin}px;
+
+      img {
+        max-width: min(70vw, ${siteContentWidth * 0.7}px);
+        max-height: 125vh;
+      }
+
+      .description {
+        margin: 0 ${margin}px 0 ${margin * 2}px;
+      }
+
+      ${description === "" &&
+      css`
+        /* Center if there's no description to push the image aside for */
+        flex-wrap: wrap;
 
         img {
-          max-height: 100vh;
+          // in other words, remove the extra strict width limit when there's no description to make room for
+          max-width: ${siteContentWidth * 0.7}px;
         }
+      `}
+    `;
 
-        .description {
-          margin: ${margin * 2}px auto ${margin}px;
-          p {
-            padding: 0 15px;
-          }
-        }
-      `;
+    if (orientation === "landscape") {
+      return landscapeStyles;
     } else {
       return css`
-        max-width: ${siteContentWidth}px;
-        padding: 0 ${margin}px;
-
-        img {
-          max-width: min(70vw, ${siteContentWidth * 0.7}px);
-          max-height: 125vh;
+        @media (max-width: ${tabletWidth - 1}px) {
+          ${landscapeStyles}
         }
 
-        .description {
-          margin: 0 ${margin}px 0 ${margin * 2}px;
+        @media (min-width: ${tabletWidth}px) {
+          ${portraitSquareStyles}
         }
-
-        ${description === "" &&
-        css`
-          /* Center if there's no description to push the image aside for */
-          justify-content: center;
-          flex-wrap: wrap;
-
-          img {
-            max-width: ${siteContentWidth *
-            0.7}px; // in other words, remove the extra strict width limit when there's no description to make room for
-          }
-        `}
       `;
     }
   }}

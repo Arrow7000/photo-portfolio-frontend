@@ -1,6 +1,6 @@
 import { FC } from "react";
 import Link from "next/link";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import {
   black,
   margin,
@@ -9,6 +9,10 @@ import {
   tabletWidth,
 } from "./styles";
 import Head from "next/head";
+import { adlerDevUrl, instaUrl } from "./config";
+import { getYear } from "./helpers";
+
+type BreakingProps = { breaking?: boolean };
 
 export const WidthConstrainer = styled.div`
   max-width: ${siteContentWidth}px;
@@ -18,10 +22,14 @@ export const WidthConstrainer = styled.div`
 
 const HomeLink = styled.a`
   padding: 15px;
-  font-size: 2rem;
   font-weight: 300;
+  font-size: 1.5rem;
   line-height: 1;
   text-transform: uppercase;
+
+  @media (min-width: ${mobileWidth}px) {
+    font-size: 2rem;
+  }
 `;
 
 const NavBar = styled.nav`
@@ -30,6 +38,13 @@ const NavBar = styled.nav`
   justify-content: space-between;
   align-items: center;
   margin-right: ${margin * 2}px;
+`;
+
+const RightNavSection = styled.div`
+  @media (max-width: ${mobileWidth}px) {
+    /* It's too crowded to display these on mobile */
+    display: none;
+  }
 `;
 
 const ExternalLink = styled.a`
@@ -53,8 +68,20 @@ const FooterBar = styled.footer`
   text-transform: uppercase;
 `;
 
-const Middot = styled.span`
+const Middot = styled.span<BreakingProps>`
   margin: 0 ${margin / 2}px;
+
+  ${({ breaking }) =>
+    // This sneaky thing converts this middot to an invisible break, which means we can control where and when the footer list of links breaks and we can ensure that it doesn't display a hanging middot when it does break.
+    breaking &&
+    css`
+      @media (max-width: ${mobileWidth - 1}px) {
+        overflow: hidden;
+        margin: 0;
+        display: block;
+        height: 0;
+      }
+    `}
 
   @media (min-width: ${mobileWidth}px) {
     margin: 0 ${margin}px;
@@ -65,9 +92,10 @@ const Middot = styled.span`
   }
 `;
 
-const FooterMiddot = () => <Middot>&middot;</Middot>;
+const FooterMiddot = (p: BreakingProps) => <Middot {...p}>&middot;</Middot>;
 
 export const Layout: FC = ({ children }) => {
+  const year = getYear();
   return (
     <>
       <Head>
@@ -92,12 +120,10 @@ gtag('config', 'UA-145880995-2');
           <Link href="/" passHref>
             <HomeLink>Home</HomeLink>
           </Link>
-          <div>
-            <ExternalLink href="https://instagram.com/arrow7000">
-              Instagram
-            </ExternalLink>
-            <ExternalLink href="https://adler.dev">adler.dev</ExternalLink>
-          </div>
+          <RightNavSection>
+            <ExternalLink href={instaUrl}>Instagram</ExternalLink>
+            <ExternalLink href={adlerDevUrl}>adler.dev</ExternalLink>
+          </RightNavSection>
         </NavBar>
         <Hr />
       </WidthConstrainer>
@@ -106,9 +132,9 @@ gtag('config', 'UA-145880995-2');
         <Link href="/">
           <a>Home</a>
         </Link>{" "}
-        <FooterMiddot /> <a href="https://instagram.com/arrow7000">Instagram</a>{" "}
-        <FooterMiddot /> <a href="https://adler.dev">adler.dev</a>{" "}
-        <FooterMiddot /> © Aron Adler 2022
+        <FooterMiddot /> <a href={instaUrl}>Instagram</a> <FooterMiddot />{" "}
+        <a href={adlerDevUrl}>adler.dev</a> <FooterMiddot breaking /> © Aron
+        Adler {year}
       </FooterBar>
     </>
   );

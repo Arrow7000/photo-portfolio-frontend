@@ -53,3 +53,8 @@ export const pluraliseStr = (str: string, num: number) =>
 
 export const getOrientation = ({ width, height }: NewPhoto): Orientation =>
   height === width ? "square" : width > height ? "landscape" : "portrait";
+
+export const getYear = () => {
+  const now = new Date();
+  return now.getFullYear();
+};

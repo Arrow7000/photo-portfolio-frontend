@@ -9,13 +9,9 @@ import { AuthProvider } from "../components/AuthProvider";
 
 const style = css`
   :root {
-    font-size: 10px;
+    font-size: 16px;
     font-family: "Open Sans", sans-serif;
     color: ${black};
-
-    @media (min-width: ${mobileWidth}px) {
-      font-size: 16px;
-    }
   }
 
   a {
