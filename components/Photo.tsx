@@ -5,6 +5,7 @@ import { getLargestImgUrl, getOrientation } from "./helpers";
 
 /**
  * @TODO it would be good if we could make square images have the same styling as landscape images on mobile but portrait styling on desktop. Atm they have the same styling as portrait images.
+ * @TODO also would be good to make the font size and margin size of the description text smaller for mobile, especially for portrait images.
  */
 const ImageContainer = styled.div<PhotoProps>`
   display: flex;
@@ -52,13 +53,6 @@ const ImageContainer = styled.div<PhotoProps>`
         max-width: ${siteContentWidth}px;
         padding: 0 ${margin}px;
 
-        ${description === "" &&
-        css`
-          /* Center if there's no description to push the image aside for */
-          justify-content: center;
-          flex-wrap: wrap;
-        `}
-
         img {
           max-width: min(70vw, ${siteContentWidth * 0.7}px);
           max-height: 125vh;
@@ -67,6 +61,18 @@ const ImageContainer = styled.div<PhotoProps>`
         .description {
           margin: 0 ${margin}px 0 ${margin * 2}px;
         }
+
+        ${description === "" &&
+        css`
+          /* Center if there's no description to push the image aside for */
+          justify-content: center;
+          flex-wrap: wrap;
+
+          img {
+            max-width: ${siteContentWidth *
+            0.7}px; // in other words, remove the extra strict width limit when there's no description to make room for
+          }
+        `}
       `;
     }
   }}
